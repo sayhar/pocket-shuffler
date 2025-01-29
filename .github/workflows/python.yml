@@ -5,20 +5,23 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.x"]
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.7"
+          python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest black mypy ruff
+          pip install -r requirements-dev.txt
       - name: Check formatting
         run: black --check .
       - name: Type checking
-        run: mypy pocket_manager
+        run: mypy pocket_core
       - name: Lint
         run: ruff check .

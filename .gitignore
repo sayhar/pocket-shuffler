@@ -34,4 +34,4 @@ env/
 
 # Project specific
 pocket_data/
-pocket_manager/config.py
+pocket_core/config.py

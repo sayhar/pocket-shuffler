@@ -1,11 +1,29 @@
 # Pocket Manager
 
 [![Python CI](https://github.com/sayhar/pocket-shuffler/actions/workflows/python.yml/badge.svg)](https://github.com/sayhar/pocket-shuffler/actions)
-[![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Uses: pocket](https://img.shields.io/badge/uses-pocket-blue.svg)](https://github.com/tapanpandita/pocket/)
 
-Tool to sync and manage Pocket articles locally.
+## Overview
+
+This project started as a Pocket sync tool but is evolving into a platform for sharing my reading life.
+The goal is to create a window into my intellectual journey - what I read, when I read it, and what I think about it.
+
+## Project Structure
+
+The project is split into components:
+
+- `pocket-core/` - Core sync and storage engine
+  - Syncs with Pocket API
+  - Maintains local state
+  - Will provide API for other components
+
+Future components:
+
+- `web/` - Web interface for public viewing
+- `api/` - REST API for integrations
+- `writers/` - Optional integrations to write annotations to other systems (e.g., Obsidian)
 
 ## Dependencies
 
@@ -22,14 +40,11 @@ pip install -r requirements.txt
 2. Get your Pocket access token (first time only):
 
 ```bash
-python -m pocket_manager.auth
-```
+python -m pocket_core.auth  # Get Pocket authorization
+# Copy the access token to pocket_core/config.py
 
-3. When prompted:
-   - Click the authorization URL
-   - Log into Pocket and authorize the app
-   - Copy the access token
-   - Update `ACCESS_TOKEN` in `pocket_manager/config.py`
+python -m pocket_core      # Start syncing
+```
 
 ## Usage
 
@@ -38,10 +53,10 @@ python -m pocket_manager.auth
 Download or update articles from Pocket:
 
 ```bash
-python -m pocket_manager
+python -m pocket_core
 
 # Set logging level (recommended):
-python -m pocket_manager --log-level DEBUG
+python -m pocket_core --log-level DEBUG
 ```
 
 This will:
@@ -56,7 +71,7 @@ This will:
 ## File Structure
 
 ```
-pocket_manager/
+pocket_core/
 ├── __init__.py # Package initialization
 ├── __main__.py # Command-line entry point
 ├── api.py # Pocket API functions
@@ -88,6 +103,8 @@ pocket_data/ # Created automatically
 
 ## Future Plans
 
+### Short Term
+
 1. **Hosting**
 
    - Deploy as a web service (likely on Fly.io or Railway)
@@ -102,14 +119,36 @@ pocket_data/ # Created automatically
    - Basic article management
 
 3. **Mobile Access**
-
    - Simple mobile interface
    - Quick article actions
 
-4. **Multi-user Support**
-   - User accounts
-   - Individual article collections
-   - Shared annotations
+### Long Term Vision
+
+1. **Public Reading Stream**
+
+   - Show what I'm currently reading
+   - Timeline of when I read articles
+   - My thoughts and annotations
+   - Context of why articles matter to me
+
+2. **Social Features**
+
+   - Allow comments on my reading choices
+   - Suggest related articles
+   - Ask questions about articles
+   - Share reading patterns and interests
+
+3. **Integration Points**
+
+   - Write annotations to Obsidian
+   - Connect with other reading services
+   - Export data in various formats
+
+4. **Analytics & Insights**
+   - Reading patterns over time
+   - Topic clustering
+   - Connection mapping between articles
+   - Personal knowledge graph visualization
 
 Log levels:
 
