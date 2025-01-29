@@ -37,6 +37,8 @@ def get_articles(state: str = "all") -> List[Dict[str, Any]]:
                 count=count,
                 offset=offset,
             )
+            if not response:
+                break
 
             if "list" not in response[0]:
                 break

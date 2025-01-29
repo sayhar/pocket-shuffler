@@ -32,6 +32,9 @@ env/
 *.swp
 *.swo
 
+# MyPy and other type checking annoyances
+.mypy_cache/ 
+
 # Project specific
 pocket_data/
 pocket_core/config.json

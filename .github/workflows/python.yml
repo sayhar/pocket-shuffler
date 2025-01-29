@@ -22,6 +22,6 @@ jobs:
       - name: Check formatting
         run: black --check .
       - name: Type checking
-        run: mypy pocket_core
+        run: MYPYPATH=.github/workflows/stubs mypy pocket_core
       - name: Lint
         run: ruff check .
