@@ -57,8 +57,8 @@ This will:
 
 ```
 pocket_manager/
-├── **init**.py # Package initialization
-├── **main**.py # Command-line entry point
+├── __init__.py # Package initialization
+├── __main__.py # Command-line entry point
 ├── api.py # Pocket API functions
 ├── auth.py # Authentication utilities
 ├── cli.py # Command-line interface
