@@ -7,7 +7,7 @@
 import time
 from typing import Any, Dict, List, Tuple
 from pocket import Pocket
-from .config import Config
+from . import config
 
 
 def get_articles(state: str = "all") -> List[Dict[str, Any]]:
@@ -92,7 +92,6 @@ def get_pocket_instance() -> Pocket:
     Raises:
         RuntimeError: If the access token is invalid or missing.
     """
-    config = Config()
     access_token = config.get("ACCESS_TOKEN")
 
     if not access_token:

@@ -1,8 +1,10 @@
 # Pocket Manager
 
 [![Python CI](https://github.com/sayhar/pocket-shuffler/actions/workflows/python.yml/badge.svg)](https://github.com/sayhar/pocket-shuffler/actions)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Ruff](https://img.shields.io/badge/code%20linting-ruff-red)](https://github.com/astral-sh/ruff)
+[![Typing: mypy](https://img.shields.io/badge/typing-mypy-blue)](https://github.com/python/mypy)
 [![Uses: pocket](https://img.shields.io/badge/uses-pocket-blue.svg)](https://github.com/tapanpandita/pocket/)
 
 ## Overview
@@ -60,12 +62,17 @@ python -m pocket_core sync --log-level DEBUG  # Sync with debug output
 ### Library Usage
 
 ```python
-from pocket_core.auth import get_access_token
+from pocket_core import config
 from pocket_core.sync import sync_articles
 
 # Get authorization
-token = get_access_token() # This will automatically save the token to config.json
+token = get_access_token()  # This will automatically save the token to config.json
 
+# Read config values
+value = config.get("SOME_KEY")
+
+# Update config
+config.set("SOME_KEY", "new_value")
 
 # Sync articles
 sync_articles(log_level="DEBUG")  # Optional: set log level
