@@ -7,8 +7,7 @@
 
 ## Overview
 
-This project started as a Pocket sync tool but is evolving into a platform for sharing my reading life.
-The goal is to create a window into my intellectual journey - what I read, when I read it, and what I think about it.
+This project started as a Pocket sync tool but is evolving into a platform for sharing my reading life. The goal is to create a window into my intellectual journey - what I read, when I read it, and what I think about it.
 
 ## Project Structure
 
@@ -22,6 +21,7 @@ The project is split into components:
 Future components:
 
 - `web/` - Web interface for public viewing
+- `mobile/` - iPhone and Android interface?
 - `api/` - REST API for integrations
 - `writers/` - Optional integrations to write annotations to other systems (e.g., Obsidian)
 
@@ -37,122 +37,86 @@ Future components:
 pip install -r requirements.txt
 ```
 
-2. Get your Pocket access token (first time only):
+## Configuration
 
-```bash
-python -m pocket_core.auth  # Get Pocket authorization
-# Copy the access token to pocket_core/config.py
+Before running the application, create a `config.json` file based on `config.json.template`. Fill in the required fields:
 
-python -m pocket_core      # Start syncing
-```
+- `CONSUMER_KEY`: Your Pocket API consumer key.
+- `REDIRECT_URI`: The URI to redirect after authorization.
+- `ACCESS_TOKEN`: This will be populated after running the authentication command.
+- Logging and data storage configurations can also be set here.
 
 ## Usage
 
-### Sync Articles
-
-Download or update articles from Pocket:
+### Command Line Usage
 
 ```bash
-python -m pocket_core
-
-# Set logging level (recommended):
-python -m pocket_core --log-level DEBUG
+python -m pocket_core            # Show help
+python -m pocket_core auth       # Get authorization token
+python -m pocket_core sync       # Sync with default settings
+python -m pocket_core sync --log-level DEBUG  # Sync with debug output
 ```
 
-This will:
+### Library Usage
 
-- Download all articles if running for the first time
-- Only fetch changes since last sync on subsequent runs
-- Store articles in `pocket_data/` directory:
-  - `unread_articles.json`: Current unread articles
-  - `archived_articles.json`: Archived articles
-  - `last_sync.json`: Timestamp of last successful sync
+```python
+from pocket_core.auth import get_access_token
+from pocket_core.sync import sync_articles
 
-## File Structure
+# Get authorization
+token = get_access_token() # This will automatically save the token to config.json
 
-```
-pocket_core/
-├── __init__.py # Package initialization
-├── __main__.py # Command-line entry point
-├── api.py # Pocket API functions
-├── auth.py # Authentication utilities
-├── cli.py # Command-line interface
-├── config.py # Configuration and credentials
-├── logging.py # Logging configuration
-├── storage.py # Local storage operations
-└── sync.py # Main sync logic
 
-pocket_data/ # Created automatically
-├── unread_articles.json # Current unread articles
-├── archived_articles.json # Archived articles
-└── last_sync.json # Timestamp of last successful sync
+# Sync articles
+sync_articles(log_level="DEBUG")  # Optional: set log level
 ```
 
-## Troubleshooting
+## Authentication
 
-- First time setup:
+First time setup to get your Pocket access token:
 
-  1. Run `auth.py` to get your access token
-  2. Copy the token to `config.py`
-  3. Run `sync.py` to download your articles
+```bash
+python -m pocket_core auth  # Get authorization token
+# Follow the prompts to authorize and get your token
+# The token will be saved in pocket_core/config.json
+```
 
-- If sync fails:
-  1. Check your API credentials in `config.py`
-  2. Delete `last_sync.json` to force a full refresh
-  3. Run sync again
+## Logging
+
+Logging configuration can be adjusted in `config.json`. The following fields are available:
+
+- `LOG_FORMAT`: Format of the log messages.
+- `DEFAULT_LOG_LEVEL`: Default logging level (e.g., DEBUG, INFO).
+- `LOG_DATE_FORMAT`: Format for the date in log messages.
 
 ## Future Plans
 
 ### Short Term
 
-1. **Hosting**
-
-   - Deploy as a web service (likely on Fly.io or Railway)
-   - SQLite database for article storage
-   - Simple authentication system
-
-2. **Web Interface**
-
-   - Show random article suggestions
-   - Allow archiving articles directly
-   - Add favorites/annotations
-   - Basic article management
-
-3. **Mobile Access**
-   - Simple mobile interface
-   - Quick article actions
-
-### Long Term Vision
-
-1. **Public Reading Stream**
-
-   - Show what I'm currently reading
-   - Timeline of when I read articles
-   - My thoughts and annotations
-   - Context of why articles matter to me
-
-2. **Social Features**
-
-   - Allow comments on my reading choices
-   - Suggest related articles
-   - Ask questions about articles
-   - Share reading patterns and interests
-
-3. **Integration Points**
-
-   - Write annotations to Obsidian
-   - Connect with other reading services
-   - Export data in various formats
-
-4. **Analytics & Insights**
-   - Reading patterns over time
-   - Topic clustering
-   - Connection mapping between articles
-   - Personal knowledge graph visualization
-
-Log levels:
-
-- DEBUG: Show all details including article modifications
-- INFO: Show basic sync progress (default)
-- WARNING: Show only warnings and errors
-- ERROR: Show only errors
+1. Hosting
+   Deploy as a web service (likely on Fly.io or Railway) to make the tool accessible online.
+   Use an SQLite database for article storage to allow for more complex queries and data management.
+   Implement a simple authentication system to secure user data.
+2. Web Interface
+   Develop a user-friendly web interface to show random article suggestions.
+   Allow users to archive articles directly from the web interface.
+   Implement features for adding favorites and annotations.
+   Provide basic article management capabilities.
+3. Mobile Access
+   Create a simple mobile interface for quick article actions.
+   Implement push notifications for new articles or updates.
+   Long Term Vision
+4. Public Reading Stream
+   Show what I'm currently reading in real-time.
+   Create a timeline of when articles were read.
+   Share thoughts and annotations on articles.
+   Provide context on why certain articles matter to me.
+5. Social Features
+   Allow users to comment on reading choices.
+   Suggest related articles based on reading patterns.
+   Enable users to ask questions about articles.
+   Share reading patterns and interests with others.
+6. Integration Points
+   Write annotations to Obsidian or other note-taking apps.
+   Connect with other reading services for a more comprehensive experience.
+   Export data in various formats for offline use or backup.

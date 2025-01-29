@@ -1,6 +1,6 @@
-"""Entry point for pocket_manager package."""
+"""Entry point for pocket-core package."""
 
-from .sync import main
+from .cli import parse_and_run
 
 if __name__ == "__main__":
-    main()
+    parse_and_run()

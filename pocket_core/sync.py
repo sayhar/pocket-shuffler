@@ -4,7 +4,6 @@ import logging
 import time
 from datetime import datetime
 
-from .cli import parse_args
 from .logging import setup_logging
 from .api import get_articles, get_modified_since
 from .storage import (
@@ -18,19 +17,13 @@ from .storage import (
 logger = logging.getLogger(__name__)
 
 
-def main() -> None:
-    """Main entry point for sync command."""
-    args = parse_args()
-    setup_logging(args)
-    sync_articles()
+def sync_articles(log_level: str = "INFO") -> None:
+    """Sync articles with Pocket.
 
-
-def sync_articles() -> None:
-    """Sync local articles with Pocket.
-
-    Raises:
-        RuntimeError: If sync fails
+    Args:
+        log_level: Logging level to use
     """
+    setup_logging(log_level)
     logger.info("Starting sync")
 
     # Get last sync time

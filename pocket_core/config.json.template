@@ -1,0 +1,16 @@
+{
+    "CONSUMER_KEY": "",
+    "REDIRECT_URI": "http://localhost:8080",
+    "ACCESS_TOKEN": "",
+    
+    
+    "LOG_FORMAT": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    "DEFAULT_LOG_LEVEL": "INFO",
+    "LOG_DATE_FORMAT": "%Y-%m-%d %H:%M:%S",
+    
+    
+    "DATA_DIR": "pocket_data",
+    "UNREAD_FILE": "unread_articles.json",
+    "ARCHIVED_FILE": "archived_articles.json",
+    "LAST_SYNC_FILE": "last_sync.json"
+} 

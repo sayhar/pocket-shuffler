@@ -4,7 +4,14 @@ import os
 import json
 from typing import Any, Dict, List, Optional
 from datetime import datetime
-from .config import DATA_DIR
+from .config import Config
+
+
+def get_data_dir() -> str:
+    """Get data directory path."""
+    config = Config()
+    data_dir = config.get("DATA_DIR")
+    return os.path.abspath(data_dir)
 
 
 def process_article(article: Dict[str, Any]) -> Dict[str, Any]:
@@ -28,8 +35,9 @@ def process_article(article: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def load_articles(filename: str, data_dir: str = DATA_DIR) -> Dict[str, Dict[str, Any]]:
+def load_articles(filename: str) -> Dict[str, Dict[str, Any]]:
     """Load articles from a JSON file."""
+    data_dir = get_data_dir()
     try:
         with open(os.path.join(data_dir, filename), "r") as f:
             return {article["item_id"]: article for article in json.load(f)}
@@ -37,26 +45,31 @@ def load_articles(filename: str, data_dir: str = DATA_DIR) -> Dict[str, Dict[str
         return {}
 
 
-def save_articles(
-    articles: List[Dict[str, Any]], filename: str, data_dir: str = DATA_DIR
-) -> None:
+def save_articles(articles: List[Dict[str, Any]], filename: str) -> None:
     """Save articles to a JSON file."""
+    data_dir = get_data_dir()
     os.makedirs(data_dir, exist_ok=True)
     with open(os.path.join(data_dir, filename), "w", newline="\n") as f:
         json.dump(articles, f, ensure_ascii=False, indent=2)
 
 
-def get_last_sync(data_dir: str = DATA_DIR) -> Optional[int]:
+def get_last_sync() -> Optional[int]:
     """Get timestamp of last successful sync."""
+    data_dir = get_data_dir()
+    config = Config()
+    last_sync_file = config.get("LAST_SYNC_FILE")
     try:
-        with open(os.path.join(data_dir, "last_sync.json"), "r") as f:
+        with open(os.path.join(data_dir, last_sync_file), "r") as f:
             return json.load(f)["last_sync"]
     except FileNotFoundError:
         return None
 
 
-def save_last_sync(timestamp: int, data_dir: str = DATA_DIR) -> None:
+def save_last_sync(timestamp: int) -> None:
     """Save timestamp of successful sync."""
+    data_dir = get_data_dir()
+    config = Config()
+    last_sync_file = config.get("LAST_SYNC_FILE", "last_sync.json")
     os.makedirs(data_dir, exist_ok=True)
-    with open(os.path.join(data_dir, "last_sync.json"), "w", newline="\n") as f:
+    with open(os.path.join(data_dir, last_sync_file), "w", newline="\n") as f:
         json.dump({"last_sync": timestamp}, f)

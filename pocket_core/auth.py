@@ -1,7 +1,7 @@
 """Authentication utilities for Pocket API."""
 
 from pocket import Pocket
-from .config import CONSUMER_KEY, REDIRECT_URI
+from .config import Config
 
 
 def get_access_token() -> str:
@@ -20,24 +20,27 @@ def get_access_token() -> str:
         RuntimeError: If token retrieval fails
     """
     try:
+        config = Config()
         request_token = Pocket.get_request_token(
-            consumer_key=CONSUMER_KEY, redirect_uri=REDIRECT_URI
+            consumer_key=config.get("CONSUMER_KEY"), redirect_uri=config.get("REDIRECT_URI")
         )
 
-        auth_url = Pocket.get_auth_url(code=request_token, redirect_uri=REDIRECT_URI)
+        auth_url = Pocket.get_auth_url(
+            code=request_token, redirect_uri=config.get("REDIRECT_URI")
+        )
 
         print(f"Go to this URL to authorize the app:\n{auth_url}")
         input("Press Enter after you've authorized the app...")
 
         user_credentials = Pocket.get_credentials(
-            consumer_key=CONSUMER_KEY, code=request_token
+            consumer_key=config.get("CONSUMER_KEY"), code=request_token
         )
         access_token = user_credentials["access_token"]
         print(f"\nYour access token is: {access_token}")
+
+        # Save the token back to config.json
+        config.update("ACCESS_TOKEN", access_token)
+
         return access_token
     except Exception as e:
         raise RuntimeError(f"Error retrieving access token: {e}") from e
-
-
-if __name__ == "__main__":
-    get_access_token()

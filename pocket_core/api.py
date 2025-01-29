@@ -1,9 +1,12 @@
 """Pocket API interactions."""
+# Specifically, this is the API that talks to the Pocket server. 
+# A future api file will be the API that others can use to talk to this program. 
+# We will resolve those naming issues later.
 
 import time
 from typing import Any, Dict, List, Tuple
 from pocket import Pocket
-from .config import CONSUMER_KEY, ACCESS_TOKEN
+from .config import Config
 
 
 def get_articles(state: str = "all") -> List[Dict[str, Any]]:
@@ -18,7 +21,7 @@ def get_articles(state: str = "all") -> List[Dict[str, Any]]:
     Raises:
         RuntimeError: If article fetch fails
     """
-    pocket = Pocket(CONSUMER_KEY, ACCESS_TOKEN)
+    pocket = get_pocket_instance()
     articles = []
     offset = 0
     count = 100
@@ -66,7 +69,7 @@ def get_modified_since(timestamp: int) -> Tuple[Dict[str, Any], int]:
     Raises:
         RuntimeError: If fetch fails
     """
-    pocket = Pocket(CONSUMER_KEY, ACCESS_TOKEN)
+    pocket = get_pocket_instance()
     response = pocket.get(
         state="all",
         detailType="complete",
@@ -78,3 +81,27 @@ def get_modified_since(timestamp: int) -> Tuple[Dict[str, Any], int]:
 
     current_time = int(response[0].get("since", time.time()))
     return response[0]["list"], current_time
+
+
+def get_pocket_instance() -> Pocket:
+    """Get authenticated Pocket instance.
+
+    Raises:
+        RuntimeError: If the access token is invalid or missing.
+    """
+    config = Config()
+    access_token = config.get("ACCESS_TOKEN")
+    
+    if not access_token:
+        raise RuntimeError("Access token is missing. Please authenticate first.")
+    
+    try:
+        pocket_instance = Pocket(
+            consumer_key=config.get("CONSUMER_KEY"),
+            access_token=access_token
+        )
+        # Optionally, you could make a test call to validate the token here
+        # e.g., pocket_instance.get() to check if the token is valid
+        return pocket_instance
+    except Exception as e:
+        raise RuntimeError(f"Failed to create Pocket instance: {e}")

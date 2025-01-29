@@ -1,22 +1,22 @@
 """Logging configuration for Pocket Manager."""
 
 import logging
-import argparse
-import os
-from .config import DEFAULT_LOG_LEVEL, LOG_FORMAT, LOG_DATE_FORMAT
+from .config import Config
 
-def setup_logging(args: argparse.Namespace = None) -> None:
-    """Set up logging with priority: args > env > config default."""
-    
-    # Priority: CLI args > env var > config default
-    log_level = (
-        args.log_level if args and hasattr(args, "log_level")
-        else os.getenv("POCKET_LOG_LEVEL")
-        or DEFAULT_LOG_LEVEL
-    )
+
+def setup_logging(log_level: str = None) -> None:
+    """Configure logging.
+
+    Args:
+        log_level: Override default log level
+    """
+    config = Config()
+    default_format = config.get("LOG_FORMAT")
+    default_level = config.get("DEFAULT_LOG_LEVEL")
+    date_format = config.get("LOG_DATE_FORMAT")
 
     logging.basicConfig(
-        level=log_level,
-        format=LOG_FORMAT,
-        datefmt=LOG_DATE_FORMAT,
-    ) 
+        format=default_format,
+        level=log_level or default_level,
+        datefmt=date_format,
+    )
