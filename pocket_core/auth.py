@@ -22,7 +22,8 @@ def get_access_token() -> str:
     try:
         config = Config()
         request_token = Pocket.get_request_token(
-            consumer_key=config.get("CONSUMER_KEY"), redirect_uri=config.get("REDIRECT_URI")
+            consumer_key=config.get("CONSUMER_KEY"),
+            redirect_uri=config.get("REDIRECT_URI"),
         )
 
         auth_url = Pocket.get_auth_url(

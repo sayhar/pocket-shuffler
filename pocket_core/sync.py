@@ -66,9 +66,9 @@ def sync_articles(log_level: str = "INFO") -> None:
             location = (
                 "unread"
                 if article_id in local_unread
-                else "archived"
-                if article_id in local_archived
-                else "not in collections"
+                else (
+                    "archived" if article_id in local_archived else "not in collections"
+                )
             )
             logger.debug(f"Article modified: {title}")
             logger.debug(f"  Status: {status} (was in {location})")

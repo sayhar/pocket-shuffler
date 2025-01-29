@@ -1,6 +1,7 @@
 """Pocket API interactions."""
-# Specifically, this is the API that talks to the Pocket server. 
-# A future api file will be the API that others can use to talk to this program. 
+
+# Specifically, this is the API that talks to the Pocket server.
+# A future api file will be the API that others can use to talk to this program.
 # We will resolve those naming issues later.
 
 import time
@@ -91,14 +92,13 @@ def get_pocket_instance() -> Pocket:
     """
     config = Config()
     access_token = config.get("ACCESS_TOKEN")
-    
+
     if not access_token:
         raise RuntimeError("Access token is missing. Please authenticate first.")
-    
+
     try:
         pocket_instance = Pocket(
-            consumer_key=config.get("CONSUMER_KEY"),
-            access_token=access_token
+            consumer_key=config.get("CONSUMER_KEY"), access_token=access_token
         )
         # Optionally, you could make a test call to validate the token here
         # e.g., pocket_instance.get() to check if the token is valid
