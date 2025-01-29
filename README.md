@@ -1,6 +1,15 @@
 # Pocket Manager
 
+[![Python CI](https://github.com/sayhar/pocket-manager/actions/workflows/python.yml/badge.svg)](https://github.com/sayhar/pocket-manager/actions)
+[![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Uses: pocket](https://img.shields.io/badge/uses-pocket-blue.svg)](https://github.com/tapanpandita/pocket/)
+
 Tool to sync and manage Pocket articles locally.
+
+## Dependencies
+
+- [pocket](https://github.com/tapanpandita/pocket/) - Python wrapper for the Pocket API
 
 ## Setup
 
@@ -46,6 +55,7 @@ This will:
 
 ## File Structure
 
+```
 pocket_manager/
 ├── **init**.py # Package initialization
 ├── **main**.py # Command-line entry point
@@ -61,6 +71,7 @@ pocket_data/ # Created automatically
 ├── unread_articles.json # Current unread articles
 ├── archived_articles.json # Archived articles
 └── last_sync.json # Timestamp of last successful sync
+```
 
 ## Troubleshooting
 

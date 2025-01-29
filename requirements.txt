@@ -1,1 +1,1 @@
-pocket
+pocket>=0.3.6
